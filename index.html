@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ivaldo Turismo — Guia Credenciado</title>
+  <meta name="description" content="Passeios e traslados com Ivaldo Turismo: Recife, Porto de Galinhas, Praia dos Carneiros, Natal e Fortaleza." />
+  <meta name="theme-color" content="#0ea5e9" />
+  <style>
+    :root{
+      --brand:#0ea5e9;      /* azul-mar */
+      --brand-2:#06b6d4;    /* água-viva */
+      --ink:#0f172a;        /* texto escuro */
+      --muted:#6b7280;      /* texto secundário */
+      --bg:#ffffff;         /* fundo */
+      --card:#ffffff;       /* cartão */
+      --ring:#e5f4ff;       /* bordas suaves */
+      --sand:#f8fafc;       /* areia */
+      --accent:#f59e0b;     /* destaque */
+      --ok:#16a34a;         /* verde ok */
+      --danger:#ef4444;     /* vermelho */
+      --radius:18px;        /* raios arredondados */
+      --shadow:0 10px 30px -10px rgba(2,132,199,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;background:var(--bg);color:var(--ink)}
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+
+    /* ===== Navegação ===== */
+    .nav{position:sticky;top:0;z-index:50;background:#ffffffd9;backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid #eef5ff}
+    .wrap{max-width:1200px;margin:0 auto;padding:12px 20px}
+    .nav .row{display:flex;align-items:center;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px}
+    .brand img{width:44px;height:44px;border-radius:12px;object-fit:cover}
+    .brand .title{line-height:1}
+    .brand small{display:block;color:var(--muted);font-weight:500}
+    .menu{margin-left:auto;display:flex;gap:18px;align-items:center}
+    .menu a{padding:8px 10px;border-radius:12px;font-weight:600;color:#0b1220}
+    .menu a:hover,.menu a.active{background:var(--ring)}
+    .cta{background:var(--brand);color:#fff;padding:10px 14px;border-radius:14px;font-weight:700;box-shadow:var(--shadow)}
+
+    /* ===== Hero (slider) ===== */
+    .hero{position:relative;height:70vh;min-height:460px;border-bottom-left-radius:36px;border-bottom-right-radius:36px;overflow:hidden}
+    .slides{position:absolute;inset:0}
+    .slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.05) contrast(1.05)}
+    .slides img{opacity:0;transition:opacity 900ms ease}
+    .slides img.active{opacity:1}
+    .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.45));}
+    .hero .content{position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;padding:0 16px}
+    .hero h1{margin:0 0 10px 0;font-size:clamp(28px,5vw,54px);}
+    .badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:8px 0 18px}
+    .badge{background:#ffffff1a;border:1px solid #ffffff33;padding:6px 10px;border-radius:999px;font-weight:600}
+    .hero .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;font-weight:800;box-shadow:var(--shadow)}
+    .btn.primary{background:#ffffff;color:#0b1220}
+    .btn.outline{background:#00000033;color:#fff;border:1px solid #ffffff66}
+
+    /* ===== Seções comuns ===== */
+    section{scroll-margin-top:88px}
+    .section{padding:56px 20px}
+    .title-row{max-width:1200px;margin:0 auto 20px;display:flex;justify-content:space-between;gap:16px;align-items:end}
+    h2{font-size:clamp(22px,3.6vw,34px);margin:0}
+    p.lead{color:var(--muted);max-width:850px}
+
+    /* ===== Serviços ===== */
+    .grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .card{grid-column:span 4;background:var(--card);border-radius:var(--radius);overflow:hidden;border:1px solid #eef5ff;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .card figure{position:relative;aspect-ratio:16/10;overflow:hidden}
+    .card img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+    .card:hover img{transform:scale(1.05)}
+    .chip{position:absolute;bottom:10px;left:10px;background:#00000085;color:#fff;padding:6px 10px;border-radius:999px;font-weight:700;border:1px solid #ffffff44}
+    .card .body{padding:16px}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:0;color:var(--muted)}
+    .card .acts{margin-top:auto;display:flex;gap:10px;padding:14px 16px}
+    .mini{font-size:14px}
+
+    /* ===== Destinos ===== */
+    .chips{display:flex;flex-wrap:wrap;gap:10px}
+    .chips .pill{border:1px solid #e9eef5;background:var(--sand);padding:8px 12px;border-radius:999px;font-weight:700}
+
+    /* ===== Sobre ===== */
+    .about{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .about .box{background:var(--card);border:1px solid #eef5ff;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+    .about .feat{display:flex;gap:12px;align-items:center}
+    .about .feat svg{flex:0 0 22px}
+
+    /* ===== Depoimentos ===== */
+    .testis{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .tcard{grid-column:span 4;border:1px solid #eef5ff;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .stars{color:#fbbf24;font-size:18px}
+    .tname{margin-top:8px;font-weight:800}
+    .tplace{color:var(--muted);font-size:14px}
+
+    /* ===== Contato ===== */
+    .contact{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+    .panel{background:var(--card);border:1px solid #eef5ff;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel .pad{padding:18px}
+    .form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .form label{font-size:12px;color:var(--muted)}
+    .form input,.form select,.form textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #dbe7ff;outline:none}
+    .form textarea{min-height:110px;grid-column:span 2}
+    .form .full{grid-column:span 2}
+    .submit{
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:#fff;border:none;padding:14px;border-radius:14px;font-weight:900;box-shadow:var(--shadow);cursor:pointer
+    }
+
+    /* ===== Rodapé ===== */
+    footer{padding:26px 20px;border-top:1px solid #eef5ff;background:var(--sand)}
+    .foot{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+    .foot small{color:var(--muted)}
+
+    /* ===== Flutuantes ===== */
+    .wpfab{position:fixed;right:16px;bottom:16px;z-index:60}
+    .wpfab a{display:inline-flex;align-items:center;gap:10px;background:#25d366;color:#fff;padding:14px 16px;border-radius:999px;font-weight:800;box-shadow:var(--shadow)}
+
+    /* ===== Efeitos ===== */
+    .reveal{opacity:0;transform:translateY(15px);transition:all .6s ease}
+    .reveal.show{opacity:1;transform:none}
+
+    /* ===== Responsividade ===== */
+    @media (max-width:1024px){
+      .card{grid-column:span 6}
+      .tcard{grid-column:span 6}
+      .about{grid-template-columns:1fr}
+      .contact{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .menu{display:none}
+      .card{grid-column:span 12}
+      .tcard{grid-column:span 12}
+      .hero{min-height:420px}
+      .form{grid-template-columns:1fr}
+      .form textarea,.form .full{grid-column:span 1}
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Navegação ===== -->
+  <nav class="nav">
+    <div class="wrap row">
+      <a class="brand" href="#top" aria-label="Início">
+        <!-- Logotipo -->
+        <img src="Logo.jpg" alt="Logo Ivaldo Turismo">
+        <div class="title">Ivaldo Turismo<small>Descubra novos horizontes</small></div>
+      </a>
+      <div class="menu" role="navigation" aria-label="Principal">
+        <a href="#servicos">Serviços</a>
+        <a href="#destinos">Destinos</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#depoimentos">Depoimentos</a>
+        <a href="#contato" class="cta">Reservar</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Hero (Slider) ===== -->
+  <header id="top" class="hero">
+    <div class="slides" aria-hidden="true">
+      <!-- Imagens de apresentação (use exatamente estes nomes na mesma pasta) -->
+      <img src="Imagem apresentação 1.jpeg" alt="Porto de Galinhas — letreiro colorido" class="active">
+      <img src="Imagem apresentação 2.jpeg" alt="Vista aérea das piscinas naturais">
+      <img src="Imagem apresentação 3.jpeg" alt="Mar azul turquesa e jangadas">
+    </div>
+    <div class="content wrap">
+      <div>
+        <h1>Experiências inesquecíveis no litoral nordestino</h1>
+        <div class="badges">
+          <span class="badge">Guia credenciado Cadastur ✅</span>
+          <span class="badge">Traslados e passeios exclusivos</span>
+          <span class="badge">Recife • Porto de Galinhas • Carneiros • Natal • Fortaleza</span>
+        </div>
+        <div class="btns">
+          <a class="btn primary" href="#servicos">Explorar serviços</a>
+          <a class="btn outline" target="_blank" rel="noopener" id="zapHero">Orçar no WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Serviços ===== -->
+  <section id="servicos" class="section reveal">
+    <div class="title-row wrap">
+      <h2>Serviços</h2>
+      <p class="lead">Todos com apoio do guia <strong>Ivaldo</strong>, credenciado no <strong>Cadastur</strong>.</p>
+    </div>
+    <div class="grid">
+      <!-- 1 -->
+      <article class="card">
+        <figure>
+          <img src="Carro-Van Coletivo.jpg" alt="Van executiva para traslados coletivos">
+          <span class="chip">Traslado Aeroporto ⇄ Hotel</span>
+        </figure>
+        <div class="body">
+          <h3>Transfer Compartilhado (Van)</h3>
+          <p>Conforto e economia do Aeroporto do Recife para hotéis em Porto de Galinhas e região.</p>
+        </div>
+        <div class="acts">
+          <a class="btn mini" href="#contato">Reservar</a>
+          <a class="btn mini" id="zap1" href="#">WhatsApp</a>
+        </div>
+      </article>
+      <!-- 2 -->
+      <article class="card">
+        <figure>
+          <img src="Carro Privativo.jpg" alt="Carro privativo prateado">
+          <span class="chip">Transfer Privativo</span>
+        </figure>
+        <div class="body">
+          <h3>Executivo Exclusivo</h3>
+          <p>Privacidade total, horários flexíveis e roteiro sob medida para seu grupo.</p>
+        </div>
+        <div class="acts">
+          <a class="btn mini" href="#contato">Reservar</a>
+          <a class="btn mini" id="zap2" href="#">WhatsApp</a>
+        </div>
+      </article>
+      <!-- 3 -->
+      <article class="card">
+        <figure>
+          <img src="Jangada nas Piscinas Naturais.avif" alt="Jangada em piscinas naturais">
+          <span class="chip">Piscinas Naturais</span>
+        </figure>
+        <div class="body">
+          <h3>Porto de Galinhas</h3>
+          <p>Passeio de jangada nas piscinas naturais em maré baixa, fotos subaquáticas opcionais.</p>
+        </div>
+        <div class="acts">
+          <a class="btn mini" href="#contato">Reservar</a>
+          <a class="btn mini" id="zap3" href="#">WhatsApp</a>
+        </div>
+      </article>
+      <!-- 4 -->
+      <article class="card">
+        <figure>
+          <img src="Catamarã.jpg" alt="Catamarã nas águas claras de Carneiros">
+          <span class="chip">Praia dos Carneiros</span>
+        </figure>
+        <div class="body">
+          <h3>Catamarã em Carneiros</h3>
+          <p>Paradas no banco de areia, argila natural e capela de São Benedito (visual externo).</p>
+        </div>
+        <div class="acts">
+          <a class="btn mini" href="#contato">Reservar</a>
+          <a class="btn mini" id="zap4" href="#">WhatsApp</a>
+        </div>
+      </article>
+      <!-- 5 -->
+      <article class="card">
+        <figure>
+          <img src="Passeio de Buggy.webp" alt="Buggy amarelo na praia">
+          <span class="chip">Emoção & Paisagens</span>
+        </figure>
+        <div class="body">
+          <h3>Passeio de Buggy</h3>
+          <p>Dunas, mirantes e paradas fotográficas. Opção de roteiro praia a praia.</p>
+        </div>
+        <div class="acts">
+          <a class="btn mini" href="#contato">Reservar</a>
+          <a class="btn mini" id="zap5" href="#">WhatsApp</a>
+        </div>
+      </article>
+      <!-- 6 -->
+      <article class="card">
+        <figure>
+          <img src="Lancha Exclusiva.jpg" alt="Lancha premium em mar azul">
+          <span class="chip">Premium</span>
+        </figure>
+        <div class="body">
+          <h3>Lancha Exclusiva</h3>
+          <p>Experiência privativa com paradas para banho e snorkeling. Ideal para comemorações.</p>
+        </div>
+        <div class="acts">
+          <a class="btn mini" href="#contato">Reservar</a>
+          <a class="btn mini" id="zap6" href="#">WhatsApp</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== Destinos ===== -->
+  <section id="destinos" class="section reveal" style="background:var(--sand)">
+    <div class="title-row wrap">
+      <h2>Destinos atendidos</h2>
+      <p class="lead">Operamos saídas de <strong>Recife (PE)</strong> para: Porto de Galinhas, Praia dos Carneiros, Natal (RN) e Fortaleza (CE).</p>
+    </div>
+    <div class="wrap chips">
+      <div class="pill">Recife</div>
+      <div class="pill">Porto de Galinhas</div>
+      <div class="pill">Praia dos Carneiros</div>
+      <div class="pill">Natal</div>
+      <div class="pill">Fortaleza</div>
+      <div class="pill">Olinda</div>
+      <div class="pill">Praia de Maracaípe</div>
+    </div>
+  </section>
+
+  <!-- ===== Sobre ===== -->
+  <section id="sobre" class="section reveal">
+    <div class="about">
+      <div class="box">
+        <h2>Sobre o guia</h2>
+        <p class="lead">Olá! Sou <strong>Ivaldo</strong>, guia de turismo credenciado no <strong>Cadastur</strong>. Amo apresentar as belezas do nosso litoral com segurança, pontualidade e aquele cuidado que transforma viagem em lembrança boa.</p>
+        <div class="feat" style="margin-top:12px">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div><strong>Atendimento humano</strong><br/><span class="muted">Apoio do planejamento ao retorno.</span></div>
+        </div>
+        <div class="feat" style="margin-top:10px">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <div><strong>Credenciado Cadastur</strong><br/><span class="muted">Operação regular e segura.</span></div>
+        </div>
+        <div class="feat" style="margin-top:10px">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><path d="M16 8h4a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4"/></svg>
+          <div><strong>Frota confortável</strong><br/><span class="muted">Carros executivos, vans e opções premium.</span></div>
+        </div>
+      </div>
+      <div class="box" style="overflow:hidden">
+        <img src="Imagem apresentação 2.jpeg" alt="Mar turquesa de Porto de Galinhas" style="border-radius:14px">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Depoimentos ===== -->
+  <section id="depoimentos" class="section reveal" style="background:var(--sand)">
+    <div class="title-row wrap">
+      <h2>Depoimentos de viajantes</h2>
+      <p class="lead">Algumas avaliações de quem já explorou o Nordeste com a gente.</p>
+    </div>
+    <div class="testis">
+      <article class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>Serviço impecável! Ivaldo super pontual e atencioso. As dicas fizeram toda diferença.</p>
+        <div class="tname">Camila R.</div>
+        <div class="tplace">São Paulo • Porto de Galinhas</div>
+      </article>
+      <article class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>Transfer privativo confortável e seguro. Recomendamos muito para famílias!</p>
+        <div class="tname">Família Nogueira</div>
+        <div class="tplace">Belo Horizonte • Recife</div>
+      </article>
+      <article class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>Catamarã em Carneiros foi maravilhoso. Organização e preço justo.</p>
+        <div class="tname">Juliana & Leo</div>
+        <div class="tplace">Curitiba • Praia dos Carneiros</div>
+      </article>
+      <article class="tcard">
+        <div class="stars">★★★★☆</div>
+        <p>Muito atencioso com minha mãe idosa. Van nova e motorista prudente.</p>
+        <div class="tname">Renata M.</div>
+        <div class="tplace">Rio de Janeiro • Recife</div>
+      </article>
+      <article class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>Buggy top! Roteiro lindo com paradas para fotos. Voltaremos!</p>
+        <div class="tname">Thiago D.</div>
+        <div class="tplace">Brasília • Maracaípe</div>
+      </article>
+      <article class="tcard">
+        <div class="stars">★★★★★</div>
+        <p>Atendimento rápido no WhatsApp e tudo como combinado. Nota 10.</p>
+        <div class="tname">Ana & Pedro</div>
+        <div class="tplace">Porto Alegre • Porto de Galinhas</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== Contato / Reserva ===== -->
+  <section id="contato" class="section reveal">
+    <div class="title-row wrap">
+      <h2>Contato & Reservas</h2>
+      <p class="lead">Base em <strong>Recife – PE</strong>. Atendemos também Porto de Galinhas, Praia dos Carneiros, Natal e Fortaleza. Fale agora no WhatsApp e receba seu orçamento.</p>
+    </div>
+
+    <div class="contact">
+      <!-- Formulário -->
+      <div class="panel">
+        <div class="pad">
+          <form id="form" class="form" autocomplete="on">
+            <div class="full">
+              <label>Nome</label>
+              <input type="text" id="nome" placeholder="Seu nome" required>
+            </div>
+            <div>
+              <label>Destino</label>
+              <select id="destino" required>
+                <option value="Porto de Galinhas">Porto de Galinhas</option>
+                <option value="Praia dos Carneiros">Praia dos Carneiros</option>
+                <option value="Natal">Natal</option>
+                <option value="Fortaleza">Fortaleza</option>
+                <option value="Recife/Olinda">Recife/Olinda (City Tour)</option>
+              </select>
+            </div>
+            <div>
+              <label>Data</label>
+              <input type="date" id="data" required>
+            </div>
+            <div>
+              <label>Pessoas</label>
+              <input type="number" id="pessoas" min="1" max="30" value="2" required>
+            </div>
+            <div>
+              <label>Tipo</label>
+              <select id="tipo">
+                <option>Transfer</option>
+                <option>Passeio Compartilhado</option>
+                <option>Passeio Privativo</option>
+                <option>Lancha Exclusiva</option>
+              </select>
+            </div>
+            <div class="full">
+              <label>Observações</label>
+              <textarea id="obs" placeholder="Horário do voo, hotel, preferências..."></textarea>
+            </div>
+            <div class="full" style="display:flex;gap:12px;align-items:center">
+              <button class="submit" type="submit">Pedir orçamento no WhatsApp</button>
+              <a class="btn mini" id="tel" href="tel:+5581998753138">Ligar</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Endereço / Mapa -->
+      <div class="panel">
+        <div class="pad">
+          <h3 style="margin-top:0">Informações</h3>
+          <p style="margin:6px 0"><strong>WhatsApp:</strong> <a id="zapLink" target="_blank" rel="noopener" href="#">(81) 99875-3138</a></p>
+          <p style="margin:6px 0"><strong>E-mail:</strong> <a href="mailto:contato@ivaldoturismo.com">contato@ivaldoturismo.com</a> <span style="color:var(--muted)">(exemplo)</span></p>
+          <p style="margin:6px 0"><strong>Base:</strong> Recife – PE</p>
+          <p style="margin:6px 0"><strong>Cadastur:</strong> Guia credenciado ✔︎</p>
+        </div>
+        <iframe title="Mapa Recife" src="https://www.google.com/maps?q=Recife%20PE&output=embed" width="100%" height="300" style="border:0;border-bottom-left-radius:18px;border-bottom-right-radius:18px" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="Logo.jpg" alt="Logo Ivaldo" width="36" height="36" style="border-radius:8px">
+        <small>© <span id="year"></span> Ivaldo Turismo — Todos os direitos reservados.</small>
+      </div>
+      <small>Site moderno e responsivo. Fotos meramente ilustrativas.</small>
+    </div>
+  </footer>
+
+  <!-- Botão flutuante WhatsApp -->
+  <div class="wpfab">
+    <a id="zapFloat" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163A11.867 11.867 0 0 1 0 11.944C0 5.355 5.373 0 12 0s12 5.355 12 11.944C24 18.533 18.627 24 12 24a12.3 12.3 0 0 1-6.149-1.654L.057 24zm6.597-3.807c1.735 1.037 3.276 1.666 5.347 1.666 5.448 0 9.887-4.41 9.887-9.84 0-5.43-4.439-9.84-9.887-9.84-5.449 0-9.888 4.41-9.888 9.84 0 2.086.671 3.994 1.807 5.573l-.957 3.497 3.691-.896zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.199-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.149-.173.198-.297.297-.496.099-.198.05-.372-.025-.521-.074-.149-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.626.711.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      Falar com Ivaldo
+    </a>
+  </div>
+
+  <script>
+    // ===== Configurações =====
+    const PHONE = '5581998753138'; // WhatsApp no formato internacional
+
+    // ===== Utilitário para montar links do WhatsApp =====
+    function wpLink(texto='Olá! Gostaria de mais informações sobre os passeios.'){ 
+      const base = `https://wa.me/${PHONE}?text=`; 
+      return base + encodeURIComponent(texto);
+    }
+
+    // Aplicar nos botões
+    function setZapLinks(){
+      const hero = document.getElementById('zapHero');
+      const floatBtn = document.getElementById('zapFloat');
+      const zapLink = document.getElementById('zapLink');
+      const tel = document.getElementById('tel');
+      if(hero) hero.href = wpLink();
+      if(floatBtn) floatBtn.href = wpLink('Olá Ivaldo! Vim pelo site e quero um orçamento.');
+      if(zapLink) zapLink.href = wpLink();
+      if(tel) tel.href = 'tel:+'.concat(PHONE);
+      const svc = [
+        ['zap1','Traslado compartilhado (van)'],
+        ['zap2','Transfer privativo executivo'],
+        ['zap3','Piscinas naturais em Porto de Galinhas'],
+        ['zap4','Catamarã na Praia dos Carneiros'],
+        ['zap5','Passeio de Buggy'],
+        ['zap6','Lancha exclusiva'],
+      ];
+      svc.forEach(([id,txt])=>{
+        const a = document.getElementById(id);
+        if(a) a.href = wpLink(`Olá! Quero orçamento para ${txt}.`);
+      });
+    }
+
+    // ===== Slider simples =====
+    function startSlider(){
+      const imgs = document.querySelectorAll('.slides img');
+      let i = 0;
+      setInterval(()=>{
+        imgs[i].classList.remove('active');
+        i = (i+1) % imgs.length;
+        imgs[i].classList.add('active');
+      }, 5200);
+    }
+
+    // ===== Scroll suave e menu ativo =====
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const id = a.getAttribute('href');
+        if(id.length>1){ e.preventDefault(); document.querySelector(id).scrollIntoView({behavior:'smooth'}); }
+      })
+    })
+
+    function setActiveOnScroll(){
+      const links = document.querySelectorAll('.menu a');
+      const secs = [...links].map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      window.addEventListener('scroll',()=>{
+        const y = window.scrollY + 120;
+        let active = 0;
+        secs.forEach((s,idx)=>{ if(s.offsetTop <= y) active = idx; });
+        links.forEach((l,i)=> l.classList.toggle('active', i===active));
+      })
+    }
+
+    // ===== Revelar ao rolar =====
+    function revealOnView(){
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('show'); })
+      },{threshold:.1});
+      document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+    }
+
+    // ===== Form enviar para WhatsApp =====
+    document.getElementById('form').addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
+      const destino = document.getElementById('destino').value;
+      const data = document.getElementById('data').value;
+      const pessoas = document.getElementById('pessoas').value;
+      const tipo = document.getElementById('tipo').value;
+      const obs = document.getElementById('obs').value.trim();
+      const texto = `Olá Ivaldo! Sou ${nome} e quero orçamento.\n`+
+                    `Destino: ${destino}\n`+
+                    `Data: ${data}\n`+
+                    `Pessoas: ${pessoas}\n`+
+                    `Tipo: ${tipo}\n`+
+                    (obs?`Obs: ${obs}`:'');
+      window.open(wpLink(texto),'_blank');
+    });
+
+    // Ano no rodapé
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Inicializações
+    setZapLinks();
+    startSlider();
+    setActiveOnScroll();
+    revealOnView();
+  </script>
+</body>
+</html>
